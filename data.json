@@ -1,0 +1,25 @@
+{
+    "logo": "",
+    "name": "收藏夹",
+    "body": [
+        {
+            "id": 1722424127,
+            "tag": "111",
+            "type": 0,
+            "content": [
+                {
+                    "id": 1722424133,
+                    "pass": 0,
+                    "username": "",
+                    "password": "",
+                    "is_vpn": 0,
+                    "facvion": "http://www.baidu.com/favicon.ico",
+                    "name": "百度",
+                    "descripition": "百度一下",
+                    "notice": "",
+                    "url": "http://www.baidu.com/"
+                }
+            ]
+        }
+    ]
+}

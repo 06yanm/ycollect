@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{datas.name}}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Arimo:400,700,400italic">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts/linecons/css/linecons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fonts/fontawesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/xenon-core.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/xenon-components.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/xenon-skins.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/s.css') }}">
+    <script src="{{ url_for('static', filename='js/jquery-1.11.1.min.js') }}"></script>
+</head>
+
+<body class="page-body">
+
+    <!-- skin-white -->
+    <div class="page-container">
+        <div class="sidebar-menu toggle-others fixed">
+            <div class="sidebar-menu-inner">
+                <header class="logo-env">
+                    <!-- logo -->
+                    <div class="logo">
+                        <a href="/" class="logo-expanded">
+                            <!-- <img data-src="assets/images/logo@2x.png" width="100%" alt="" /> -->
+                            <h2 style="color:white; text-align: center;">{{datas.name}}</h2>
+                        </a>
+                        <a href="/" class="logo-collapsed">
+                            <!-- <img data-src="assets/images/logo-collapsed@2x.png" width="40" alt="" /> -->
+                            <h4 style="color:white; text-align: center;">{{datas.name}}</h4>
+                        </a>
+                    </div>
+                    <div class="mobile-menu-toggle visible-xs">
+                        <a href="#" data-toggle="mobile-menu">
+                            <i class="fa-bars"></i>
+                        </a>
+                    </div>
+                </header>
+                <ul id="main-menu" class="main-menu">
+                    {% for item in datas.body %}
+                    <li>
+                        <a href="#{{item.tag}}" class="smooth">
+                            <i class="linecons-star"></i>
+                            <span class="title">{{item.tag}}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="admin">
+                <button type="button" class="btn btn-success" data-toggle="modal"
+                    data-target="#addWebsite">添加网站</button>
+                <button type="button" class="btn btn-warning" data-toggle="modal"
+                    data-target="#categoryedit">分类编辑</button>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#websiteedit">网站编辑</button>
+            </div>
+
+
+            <div id="websiteedit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                style="display: none;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--模态框的头部内容-->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">网站编辑</h4>
+                        </div>
+                        <!--模态框的主体内容-->
+                        <div class="modal-body">
+                            <form action="deleteWebsite" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleSelect">分类选择</label>
+                                    <select class="form-control" id="cate-id" name="cate-id">
+                                        <option value="">请选择</option>
+                                        {% for item in datas.body %}
+                                            <option value="v{{item.id}}">{{ item.tag }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleSelect">网站选择</label>
+                                    <select class="form-control" id="web-id" name="web-id">
+                                        <option value="">请选择</option>
+                                    </select>
+                                </div>
+                                <button tyoe="submit" class="btn btn-warning">删除此网站</button>
+                            </form>
+                            <form action="editWebsite" method="post">
+                                <button class="btn btn-warning" type="button" id="getWebInfo">加载网站原有信息</button>
+                                <div class="form-group">
+                                    <label for="exampleSelect">所属分类</label>
+                                    <select class="form-control" id="e-category-id" name="e-category-id">
+                                        {% for item in datas.body %}
+                                        <option value="{{item.id}}">{{ item.tag }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group" style="display: none;">
+                                    <label for="name">网站id（无需填写）:</label>
+                                    <input type="text" class="form-control" id="e-web-id" name="e-web-id" placeholder=""
+                                        required >
+                                </div>
+                                <div class="form-group" style="display: none;">
+                                    <label for="name">原分类id（无需填写）:</label>
+                                    <input type="text" class="form-control" id="e-y-category-id" name="e-y-category-id" placeholder=""
+                                        required >
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">图标地址:</label>
+                                    <input type="text" class="form-control" placeholder="" id="icons-url" name="icons-url"
+                                        required >
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">网站名:</label>
+                                    <input type="text" class="form-control" id="e-web-name" name="e-web-name" placeholder="例如：百度"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="describe">描述:</label>
+                                    <input type="text" class="form-control" id="e-web-describe" name="e-web-describe"
+                                        placeholder="例如：百度一下" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="url">url地址:</label>
+                                    <input type="text" class="form-control" id="e-web-url" name="e-web-url"
+                                        placeholder="例如：http://www.baidu.com/" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="url">仅vpn访问:</label>
+                                    <div class="radio">
+                                        <label class="label1">
+                                            <input type="radio" name="e-is-vpn" id="e-op1" value="1">
+                                            是
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="e-is-vpn" id="e-op2" value="0">
+                                            否
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notice">注意:</label>
+                                    <input type="text" class="form-control" id="e-web-notice" name="e-web-notice"
+                                        placeholder="例如： 这是一个搜索引擎" >
+                                </div>
+                                <button tyoe="submit" class="btn btn-warning">提交修改</button>
+                            </form>
+                        </div>
+                        <!--模态框的尾部内容-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="categoryedit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                style="display: none;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--模态框的头部内容-->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">分类编辑</h4>
+                        </div>
+                        <!--模态框的主体内容-->
+                        <div class="modal-body">
+                            <form action="deleteCategory" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleSelect">分类选择</label>
+                                    <select class="form-control" id="categoryid" name="categoryid">
+                                        {% for item in datas.body %}
+                                        <option value="{{item.id}}">{{ item.tag }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-warning">删除此分类</button>
+                            </form>
+                            <hr>
+                            <form action="addCategory" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleSelect">分类名称</label>
+                                    <input type="text" class="form-control" id="categoryname" name="categoryname"
+                                        placeholder="例如：测试分类" required>
+                                    <br>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleSelect">分类类型</label>
+                                    <select class="form-control" id="categorytype" name="categorytype">
+                                        <option value="0">普通网页</option>
+                                        <option value="1">文章网页</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success">添加此分类</button>
+                            </form>
+                        </div>
+                        <!--模态框的尾部内容-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="addWebsite" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                style="display: none;">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!--模态框的头部内容-->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">添加网站</h4>
+                        </div>
+                        <!--模态框的主体内容-->
+                        <div class="modal-body">
+                            <form action="addWebsite" method="POST">
+                                <div class="form-group">
+                                    <label for="exampleSelect">所属分类</label>
+                                    <select class="form-control" id="category" name="category">
+                                        {% for item in datas.body %}
+                                        <option value="{{item.id}}">{{ item.tag }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">网站名:</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="例如：百度"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="describe">描述:</label>
+                                    <input type="text" class="form-control" id="describe" name="describe"
+                                        placeholder="例如：百度一下" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="url">url地址:</label>
+                                    <input type="text" class="form-control" id="url" name="url"
+                                        placeholder="例如：http://www.baidu.com" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="url">仅vpn访问:</label>
+                                    <div class="radio">
+                                        <label class="label1">
+                                            <input type="radio" name="is-vpn" id="op1" value="1">
+                                            是
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="is-vpn" id="op2" value="0" checked>
+                                            否
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notice">注意:</label>
+                                    <input type="text" class="form-control" id="notice" name="notice"
+                                        placeholder="例如： 这是一个搜索引擎">
+                                </div>
+                                <button type="submit" class="btn btn-primary">添加</button>
+                            </form>
+                        </div>
+                        <!--模态框的尾部内容-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            {% for item in datas["body"] %}
+            <h4 class="text-gray"><i class="linecons-tag" style="margin-right: 7px;" id="{{item.tag}}"></i>{{item.tag}}
+            </h4>
+            {% for row in item["content"] %}
+            <div class="row">
+                {% for i in row %}
+                {% if item["type"] == 0 %}
+                <div class="col-sm-4">
+                    {% else %}
+                    <div class="col-sm-6">
+                        {% endif %}
+                        <div class="xe-widget xe-conversations box2 label-info"
+                            onclick="window.open('{{i.url}}', '_blank')" data-toggle="tooltip" data-placement="bottom"
+                            title="" data-original-title="{{ i.notice }}">
+                            <div class="xe-comment-entry">
+                                <a class="xe-user-img">
+                                    <img data-src="{{ i.facvion }}" class="lozad img-circle" width="40">
+                                </a>
+                                <div class="xe-comment">
+                                    <a href="#" class="xe-user-name overflowClip_1">
+                                        <strong>{{ i.name }}</strong>
+                                    </a>
+                                    <p class="overflowClip_2">{{i.descripition}}</p>
+                                </div>
+                                <div class="is-detail">
+                                    {% if i.is_vpn == 1 %}
+                                    <span class="label label-danger">VPN</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <br />
+                {% endfor %}
+
+                <footer class="main-footer sticky footer-type-1">
+                    <div class="footer-inner">
+                        <!-- Add your copyright text here -->
+                        <div class="footer-text">
+                            私人收藏家 - WebStack修改版
+                        </div>
+                        <div class="go-up">
+                            <a href="#" rel="go-top">
+                                <i class="fa-angle-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <!-- 锚点平滑移动 -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                //img lazy loaded
+                const observer = lozad();
+                observer.observe();
+
+                $(document).on('click', '.has-sub', function () {
+                    var _this = $(this)
+                    if (!$(this).hasClass('expanded')) {
+                        setTimeout(function () {
+                            _this.find('ul').attr("style", "")
+                        }, 300);
+
+                    } else {
+                        $('.has-sub ul').each(function (id, ele) {
+                            var _that = $(this)
+                            if (_this.find('ul')[0] != ele) {
+                                setTimeout(function () {
+                                    _that.attr("style", "")
+                                }, 300);
+                            }
+                        })
+                    }
+                })
+                $('.user-info-menu .hidden-sm').click(function () {
+                    if ($('.sidebar-menu').hasClass('collapsed')) {
+                        $('.has-sub.expanded > ul').attr("style", "")
+                    } else {
+                        $('.has-sub.expanded > ul').show()
+                    }
+                })
+                $("#main-menu li ul li").click(function () {
+                    $(this).siblings('li').removeClass('active'); // 删除其他兄弟元素的样式
+                    $(this).addClass('active'); // 添加当前元素的样式
+                });
+                $("a.smooth").click(function (ev) {
+                    ev.preventDefault();
+
+                    public_vars.$mainMenu.add(public_vars.$sidebarProfile).toggleClass('mobile-is-visible');
+                    ps_destroy();
+                    $("html, body").animate({
+                        scrollTop: $($(this).attr("href")).offset().top - 30
+                    }, {
+                        duration: 500,
+                        easing: "swing"
+                    });
+                });
+                return false;
+            });
+
+            var href = "";
+            var pos = 0;
+            $("a.smooth").click(function (e) {
+                $("#main-menu li").each(function () {
+                    $(this).removeClass("active");
+                });
+                $(this).parent("li").addClass("active");
+                e.preventDefault();
+                href = $(this).attr("href");
+                pos = $(href).position().top - 30;
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                var options = {
+                {% for iq in datas.body %}
+                    v{{ iq["id"] }}: [
+                    {% for oq in iq['content'] %}
+                        {% for pq in oq %}
+                            { value: '{{ pq["id"] }}', text: '{{ pq["name"] }}' }{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                        {% if not loop.last %},{% endif %}
+                    {% endfor %}
+                    ]{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            };
+
+            $('#cate-id').change(function () {
+                var selectedCategory = $(this).val();
+                var $select2 = $('#web-id');
+
+                $select2.empty();
+                $select2.append('<option value="">请选择</option>');
+
+                if (options[selectedCategory]) {
+                    $.each(options[selectedCategory], function (index, option) {
+                        $select2.append('<option value="' + option.value + '">' + option.text + '</option>');
+                    });
+                }
+            });
+        });
+        </script>
+        <script>
+            $(document).ready(function(){
+                $('#getWebInfo').click(function() {
+                    $.ajax({
+                        url: "http://127.0.0.1:{{port}}/getWebInfo?category=" + $("#cate-id").val().toString() + "&website=" + $("#web-id").val().toString(),
+                        "method": "GET",
+                        "dataType": "json",
+                        success: function(data) {
+                            if(data.code == 200) {
+                                $("#e-web-name").val(data.data.name);
+                                $("#e-web-id").val(data.data.id);
+                                $("#icons-url").val(data.data.facvion);
+                                $("#e-web-describe").val(data.data.descripition);
+                                $("#e-web-url").val(data.data.url);
+                                $("#e-web-notice").val(data.data.notice);
+                                $("#e-category-id").val(data.data.categoryid);
+                                $("#e-y-category-id").val(data.data.categoryid);
+                                if(data.data.is_vpn == 0) {
+                                    $('#e-op2').prop('checked', true);
+                                }
+                                if(data.data.is_vpn == 1) {
+                                    $('#e-op1').prop('checked', true);
+                                }
+                            }
+                        }
+                    })
+                })
+            })
+        </script>
+        <script>
+            window.onload = function() {
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+            history.pushState(null, null, document.URL);
+  });
+};
+
+        </script>
+        <!-- Bottom Scripts -->
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/TweenMax.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/resizeable.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/joinable.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/xenon-api.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/xenon-toggles.js') }}"></script>
+        <!-- JavaScripts initializations and stuff -->
+        <script src="{{ url_for('static', filename='js/xenon-custom.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/lozad.js') }}"></script>
+</body>
+
+</html>
