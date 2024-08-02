@@ -125,6 +125,40 @@ def deleteCategory():
         json.dump(new, f, ensure_ascii=False, indent=4)
     return render_template("goto.html", say="删除成功", title="操作成功")
 
+
+# 编辑分类
+# 传入参数： category-id分类id， category-name分类名称, category-type分类类型
+@app.route('/editCategory', methods=["POST"])
+def edit_category():
+    cate_id = request.form.get("category-id")
+    cate_name = request.form.get("category-name")
+    cate_type = request.form.get("category-type")
+    if not all([cate_id, cate_name]):
+        return render_template("goto.html", say="参数不全", title="操作失败")
+    with open(datajson, "r", encoding="utf-8") as file:
+        d = json.loads(file.read())
+    for category in d["body"]:
+        if category["id"] == int(cate_id):
+            category["tag"] = cate_name
+            category["type"] = int(cate_type)
+    with open(datajson, 'w', encoding='utf-8') as f:
+        json.dump(d, f, ensure_ascii=False, indent=4)
+    return render_template("goto.html", say="修改成功", title="操作成功")
+
+# 获取分类信息
+# 传入参数： categoryid分类id
+@app.route("/getCateInfo", methods=["GET"])
+def getCateInfo():
+    cate_id = request.args.get("categoryid")
+    if not cate_id:
+        return jsonify({"code": 401, "data": {}})
+    with open(datajson, "r", encoding="utf-8") as file:
+        d = json.loads(file.read())
+    for cate in d["body"]:
+        if cate["id"] == int(cate_id):
+            return jsonify({"code": 200, "data": {"id": cate["id"], "name": cate["tag"], "type": cate["type"]}})
+    return jsonify({"code": 400, "data": {}})
+
 # 删除网站
 # 传入参数： cate-id分类id， web-id网站id
 @app.route("/deleteWebsite", methods=["POST"])
@@ -208,7 +242,6 @@ def edit_website():
     with open(datajson, 'w', encoding='utf-8') as f:
         json.dump(d, f, ensure_ascii=False, indent=4)
     return render_template("goto.html", say="修改成功", title="操作成功")
-    # return f"{web_id} + {category_id} + {web_name} + {web_describe} + {web_url} + {is_vpn} + {notice}"
 
 # 获取指定网站信息
 # 传入参数：category分类id， website网站id
