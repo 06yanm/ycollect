@@ -11,9 +11,12 @@ app = Flask(__name__, static_url_path='/static')
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+# 根据数组数据分类列表
+# 用于分类-文章-类网站和-普通-类网站 
 def chunk_list(lst, chunk_size):
     return [lst[i:i+chunk_size] for i in range(0, len(lst), chunk_size)]
 
+# 判断并设置目录
 if getattr(sys, 'frozen', False):
     datapath = os.path.dirname(sys.executable)
 else:
@@ -24,6 +27,7 @@ portfile = os.path.join(datapath, "port.txt")
 with open(portfile, "r", encoding="utf-8") as file:
     porth = int(file.read())
 
+# 主页函数，返回index.html页面
 @app.route('/', methods=["GET"])
 def index():
     data = ""
@@ -37,6 +41,9 @@ def index():
             item["content"] = chunk_list(item["content"], 2)
     return render_template("index.html", datas=content, port=porth)
 
+# 添加网站
+# 传入参数： name网站名， url网站地址， dscribe网站描述， notice注意事项
+# is-vpn是否需要vpn访问， category所属分类id
 @app.route("/addWebsite", methods=["POST"])
 def addWebsite():
     name = request.form.get("name")
@@ -75,6 +82,8 @@ def addWebsite():
     
     return render_template("goto.html", say="添加成功", title="操作成功")
 
+# 添加分类
+# 传入参数： categoryname分类名， category分类类型
 @app.route("/addCategory", methods=["POST"])
 def addCategory():
     name = request.form.get("categoryname")
@@ -95,6 +104,8 @@ def addCategory():
 
     return render_template("goto.html", say="添加成功", title="操作成功")
 
+# 删除分类
+# 传入参数： categoryid分类id
 @app.route("/deleteCategory", methods=["POST"])
 def deleteCategory():
     id = request.form.get("categoryid")
@@ -114,6 +125,8 @@ def deleteCategory():
         json.dump(new, f, ensure_ascii=False, indent=4)
     return render_template("goto.html", say="删除成功", title="操作成功")
 
+# 删除网站
+# 传入参数： cate-id分类id， web-id网站id
 @app.route("/deleteWebsite", methods=["POST"])
 def deleteWebsite():
     cate_id = request.form.get("cate-id")
@@ -146,6 +159,10 @@ def deleteWebsite():
 
     return render_template("goto.html", say="删除成功", title="操作成功")
 
+# 修改网站信息
+# 传入参数： e-web-id网站id， e-category-id所属分类名， e-web-name网站名， e-web-describe网站描述
+# e-web-url网站地址， e-is-vpn是否vpn访问， e-web-notice注意， e-y-category-id原来分类id
+# icons-url图标地址
 @app.route("/editWebsite", methods=["POST"])
 def edit_website():
     web_id = request.form.get("e-web-id")
@@ -193,7 +210,8 @@ def edit_website():
     return render_template("goto.html", say="修改成功", title="操作成功")
     # return f"{web_id} + {category_id} + {web_name} + {web_describe} + {web_url} + {is_vpn} + {notice}"
 
-
+# 获取指定网站信息
+# 传入参数：category分类id， website网站id
 @app.route("/getWebInfo", methods=["GET"])
 def get_web_info():
     category = request.args.get("category")
