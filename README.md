@@ -6,7 +6,7 @@
 
 如需使用成品，请按照以下方法使用：
 
-- 没有python：点击 [这里](https://www.123pan.com/s/eFnlVv-6UVrh.html) 直接到达网盘下载，下载后解压文件到任意文件夹双击运行即可
+- 没有python：点击 [这里](https://www.123pan.com/s/eFnlVv-65Vrh.html) 直接到达网盘下载，下载后解压文件到任意文件夹双击运行即可
 - 有python环境：直接下载本项目源码后安装必要的库文件，之后双击运行main.py即可
 
 ## 文件说明
