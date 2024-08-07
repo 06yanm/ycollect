@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import json,time
 import os, webbrowser, threading,sys
 import requests
@@ -24,8 +24,14 @@ else:
 
 datajson = os.path.join(datapath, "data.json")
 portfile = os.path.join(datapath, "port.txt")
+
 with open(portfile, "r", encoding="utf-8") as file:
     porth = int(file.read())
+
+# 获取外部icons资源并返回
+@app.route('/favicon/<path:filename>')
+def favicons(filename):
+    return send_from_directory(os.path.join(datapath, "favicon"), filename)
 
 # 主页函数，返回index.html页面
 @app.route('/', methods=["GET"])
@@ -65,15 +71,16 @@ def addWebsite():
                     "username": "",
                     "password": "",
                     "is_vpn": int(is_vpn),
-                    "facvion": f"{url}favicon.ico",
+                    "facvion": f"{webid}.ico",
+                    "remoteFavicon": f"{url}/favicon.ico",
                     "name": name,
                     "descripition": describe,
                     "notice": notice,
                     "url": url
             })
     try:
-        with open(f"./static/icons/{webid}.ico", "w") as file:
-            file.write(requests.get(f"{url}favicon.ico").content)
+        with open(os.path.join(datapath, "favicon", f"{webid}.ico"), "wb") as file:
+            file.write(requests.get(f"{url}/favicon.ico").content)
     except Exception as e:
         print(e)
 
@@ -187,7 +194,11 @@ def deleteWebsite():
             if c["id"] != int(web_id):
                 new["body"][i]["content"].append(c)
         i += 1
-
+    # 删除网站对应图标
+    try:
+        os.remove(os.path.join(datapath, "favicon", f"{web_id}.ico"))
+    except Exception as e:
+        print("对应图标删除失败，请手动删除。")
     with open(datajson, 'w', encoding='utf-8') as f:
         json.dump(new, f, ensure_ascii=False, indent=4)
 
@@ -227,14 +238,15 @@ def edit_website():
                     "username": "",
                     "password": "",
                     "is_vpn": int(is_vpn),
-                    "facvion": f"./static/icons/{web_id}.ico",
+                    "facvion": f"{web_id}.ico",
+                    "remoteFavicon": facvion_url,
                     "name": web_name,
                     "descripition": web_describe,
                     "notice": notice,
                     "url": web_url
             })
     try:
-        with open(f"./static/icons/{web_id}.ico", "w") as file:
+        with open(os.path.join(datapath, "favicon", f"{web_id}.ico"), "wb") as file:
             file.write(requests.get(facvion_url).content)
     except Exception as e:
         print(e)

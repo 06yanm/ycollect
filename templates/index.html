@@ -322,7 +322,7 @@
                             title="" data-original-title="{{ i.notice }}">
                             <div class="xe-comment-entry">
                                 <a class="xe-user-img">
-                                    <img data-src="{{ i.facvion }}" class="lozad img-circle" width="40">
+                                    <img data-src="http://127.0.0.1:{{port}}/favicon/{{ i.facvion }}" class="lozad img-circle" width="40">
                                 </a>
                                 <div class="xe-comment">
                                     <a href="#" class="xe-user-name overflowClip_1">
@@ -463,7 +463,7 @@
                             if(data.code == 200) {
                                 $("#e-web-name").val(data.data.name);
                                 $("#e-web-id").val(data.data.id);
-                                $("#icons-url").val(data.data.facvion);
+                                $("#icons-url").val(data.data.remoteFavicon);
                                 $("#e-web-describe").val(data.data.descripition);
                                 $("#e-web-url").val(data.data.url);
                                 $("#e-web-notice").val(data.data.notice);

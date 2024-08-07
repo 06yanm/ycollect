@@ -8,16 +8,17 @@
             "type": 0,
             "content": [
                 {
-                    "id": 1722424133,
+                    "id": 1723021270,
                     "pass": 0,
                     "username": "",
                     "password": "",
                     "is_vpn": 0,
-                    "facvion": "http://www.baidu.com/favicon.ico",
+                    "facvion": "1723021270.ico",
+                    "remoteFavicon": "http://www.baidu.com/favicon.ico",
                     "name": "百度",
                     "descripition": "百度一下",
                     "notice": "",
-                    "url": "http://www.baidu.com/"
+                    "url": "http://www.baidu.com"
                 }
             ]
         }
